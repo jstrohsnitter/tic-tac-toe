@@ -120,6 +120,15 @@ useEffect(() => {
   init ()
 }, [board, tie, turn, winner])
 
+const handleClick = (event: any): any => {
+  console.log(event.target.id)
+  if (event.target.textContent === 'X' || event.target.textContent === 'O') {
+    return 
+  } else if (winner === true) {
+    return
+  }
+}
+
 
 
 
@@ -133,7 +142,7 @@ useEffect(() => {
         <h2 className='message' ref={messageEl}>Message</h2>
 
         <section className="board">
-        <div className="sqr" id="0" ref={squareEls}></div>
+        <div className="sqr" id="0" ref={squareEls} onClick={handleClick}></div>
         <div className="sqr" id="1" ref={squareEls}></div>
         <div className="sqr" id="2" ref={squareEls}></div>
         <div className="sqr" id="3" ref={squareEls}></div>
