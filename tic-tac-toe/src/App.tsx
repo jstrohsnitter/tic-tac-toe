@@ -24,11 +24,21 @@ function App() {
 
 /*-------------------------------- Constants --------------------------------*/
 
+const winningCombos = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6]
+]
 
 
 /*---------------------------- Variables (state) ----------------------------*/
 
-const [board, setBoard] = useState(['', '', '', '', '', '', '', '', ''])
+const [board, setBoard] = useState<Array<string>>(['', '', '', '', '', '', '', '', ''])
 
 const [turn, setTurn] = useState<string>('X')
 
@@ -46,24 +56,45 @@ const messageEl = useRef<any>(null)
 /*-------------------------------- Functions --------------------------------*/
 
 useEffect(() => {
-
+  const square: HTMLCollection = document.getElementsByClassName('sqr') //this is an html collection, it is an array
+  const squareArray = Array.from(square)
+  const message1: HTMLDivElement = messageEl.current
+  
   function updatedBoard () {
-    board.forEach((element) => 
-      console.log(element)
+    board.forEach((banana, index) => {
+      // console.log(banana)
+      // console.log(index);
     //id of square = element.indexOf (0,1,2...)
+      if (squareArray[index].id === '0' || squareArray[index].id ===  '2') {
+        squareArray[index].textContent ='X'
+      }
+      else {
+        squareArray[index].textContent = 'O'
+      }
+      
+      // console.log(squareArray[index].id)
     //if id of square = 0 or even textcontent = 'X'
+      // if (square[index] === )
     //if id of square = odd textcontent = 'O'
-    )
+  })
+  console.log(board)
+  }
+
+  function updateMessage () {
+    if (winner || tie === false) {
+      message1.textContent = turn
+    } else if ( winner === false && tie === true) {
+      message1.textContent = "Cat's Game"
+    } else {
+      message1.textContent = `${turn} wins!`
+    }
   }
 
   function init () {
-    const square: HTMLCollection = document.getElementsByClassName('sqr') //this is an html collection, it is an array
-    // square.forEach(element => {
-    //   element.textContent = 'x'
-    // });
+    
     // squareEls.current = square[1]
     // squareEls.current.textContent = 'x'
-    Array.from(square).forEach((element: Element) => {
+    squareArray.forEach((element: Element) => {
       console.log(element)
       element.textContent = ''
       // const number = element.indexOf
@@ -75,18 +106,19 @@ useEffect(() => {
     //   console.log('Element:', square)
     //   square.textContent = 'x';
     // }
-    const message1: HTMLDivElement = messageEl.current
+    
     if (message1) {
       console.log('Element:', message1)
       message1.textContent = 'New Game'
     }
     function render () {
       updatedBoard()
+      updateMessage()
     }
     render()
   }
   init ()
-}, [board])
+}, [board, tie, turn, winner])
 
 
 
