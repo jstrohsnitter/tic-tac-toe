@@ -40,36 +40,56 @@ const [tie, setTie] = useState<boolean>(false)
 /*------------------------ Cached Element References ------------------------*/
 
 const squareEls = useRef<any>(null) //useRef is used when a you want a component to 'remember some information, but you don't want that information to trigger new renders
-
+//squareEls = getElementByClass to access all the square elements
 const messageEl = useRef<any>(null)
 
 /*-------------------------------- Functions --------------------------------*/
 
 useEffect(() => {
+
+  function updatedBoard () {
+    board.forEach((element) => 
+      console.log(element)
+    //id of square = element.indexOf (0,1,2...)
+    //if id of square = 0 or even textcontent = 'X'
+    //if id of square = odd textcontent = 'O'
+    )
+  }
+
   function init () {
-    const square: any = squareEls.current.getElementsByClassName('sqr')
-    if (square) {
-      console.log('Element:', square)
-      square.textContent = '';
-    }
-    const message1: any = messageEl.current
+    const square: HTMLCollection = document.getElementsByClassName('sqr') //this is an html collection, it is an array
+    // square.forEach(element => {
+    //   element.textContent = 'x'
+    // });
+    // squareEls.current = square[1]
+    // squareEls.current.textContent = 'x'
+    Array.from(square).forEach((element: Element) => {
+      console.log(element)
+      element.textContent = ''
+      // const number = element.indexOf
+      // squareEls.current= square[element]
+      // squareEls.current.textContent = 'x'
+    })
+    // if (square) {
+    //   //for each element in square make the text content x
+    //   console.log('Element:', square)
+    //   square.textContent = 'x';
+    // }
+    const message1: HTMLDivElement = messageEl.current
     if (message1) {
       console.log('Element:', message1)
       message1.textContent = 'New Game'
     }
     function render () {
-
+      updatedBoard()
     }
     render()
   }
   init ()
-}, [])
+}, [board])
 
-function updatedBoard () {
-  board.forEach((element) => 
-  element.square.current 
-  )
-}
+
+
 
 /*----------------------------- Event Listeners -----------------------------*/
 
