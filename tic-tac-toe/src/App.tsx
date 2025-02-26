@@ -46,14 +46,118 @@ const [winner, setWinner] = useState<boolean>(false)
 
 const [tie, setTie] = useState<boolean>(false)
 
+const [turnCounter, setTurnCounter] = useState(1)
 
 /*------------------------ Cached Element References ------------------------*/
 
-// const squareEls = useRef<any>(null) //useRef is used when a you want a component to 'remember some information, but you don't want that information to trigger new renders
-// //squareEls = getElementByClass to access all the square elements
 const messageEl = useRef<HTMLDivElement | null>(null)
 
 // /*-------------------------------- Functions --------------------------------*/
+
+const handleClick = (event: any): void => {
+  setTurnCounter((prev) => prev + 1);
+
+  setTurnCounter((prev) => {
+    if (prev % 2 === 0) {
+      setTurn('O');
+    } else {
+      setTurn('X');
+    }
+    return prev;
+  });
+
+  console.log(turnCounter);
+
+  if (event.target.textContent === 'X' || event.target.textContent === 'O') {
+    return 
+  } else if (winner === true) {
+    return
+  }
+  if (turn === 'X') {
+    console.log(event.target)
+    console.log(turn)
+    event.target.textContent = 'X';
+  }
+  if (turn === 'O') {
+    console.log(turn)
+    event.target.textContent = 'O'
+  }
+  //set the index of board to equal the text content of the div with id
+  const index = Number(event.target.id)
+  console.log(index)
+  function updateBoard(index: number) {
+    const newBoard = board.map((banana, i) => {
+      if (i === index) {
+        return banana = turn
+      } else {
+        return banana
+      }
+    });
+    setBoard(newBoard)
+    console.log(newBoard)
+  }
+  
+  updateBoard(index)
+  console.log(board)
+
+};
+
+useEffect(() => {
+const newUpdatedMessage = () => {
+  if (turnCounter === 1 && messageEl.current) {
+    messageEl.current.textContent = "New Game! Player X's Turn!"
+  } else if (turn === 'X' && turnCounter != 0 && messageEl.current) {
+    messageEl.current.textContent = "Player X's Turn!"
+  } else if (turn === "O" && messageEl.current) {
+    messageEl.current.textContent = "Player O's Turn!"
+  }
+}
+
+newUpdatedMessage()
+
+
+}, [messageEl, turnCounter, turn])
+
+
+/*----------------------------- Event Listeners -----------------------------*/
+
+
+  return (
+    <>
+      <div className='game'>
+        <h1 className='title'>Tic-Tac-Toe</h1>
+        <h2 className='message' ref={messageEl}>Message</h2>
+
+        <section className="board">
+        <div className="sqr" id="0" onClick={() => handleClick(event)}></div>
+        <div className="sqr" id="1" onClick={() => handleClick(event)}></div>
+        <div className="sqr" id="2" onClick={() => handleClick(event)}></div>
+        <div className="sqr" id="3" onClick={() => handleClick(event)}></div>
+        <div className="sqr" id="4" onClick={() => handleClick(event)}></div>
+        <div className="sqr" id="5" onClick={() => handleClick(event)}></div>
+        <div className="sqr" id="6" onClick={() => handleClick(event)}></div>
+        <div className="sqr" id="7" onClick={() => handleClick(event)}></div>
+        <div className="sqr" id="8" onClick={() => handleClick(event)}></div>
+        </section>
+      </div>
+
+    </>
+  )
+}
+
+export default App
+
+
+///ref={squareEls}
+// ref={squareEls}
+// ref={squareEls}
+// ref={squareEls}
+// ref={squareEls}
+// ref={squareEls}
+// ref={squareEls}
+// ref={squareEls}
+// ref={squareEls}
+// 
 
 // useEffect(() => {
 //   const square: HTMLCollection = document.getElementsByClassName('sqr') //this is an html collection, it is an array
@@ -147,74 +251,6 @@ const messageEl = useRef<HTMLDivElement | null>(null)
 // //   console.log(board)
 // // }
 
-const [turnCounter, setTurnCounter] = useState(1)
-
-// const placePiece = (index: any, turn: string, ...board: string[]) => {
-//   setBoard(board.map((item, i) => {
-//         return i === index ? turn : item;
-//       }))
-//         console.log(board)
-// }
-
-const handleClick = (event: any): void => {
-  setTurnCounter((prev) => prev + 1);
-
-  setTurnCounter((prev) => {
-    if (prev % 2 === 0) {
-      setTurn('O');
-    } else {
-      setTurn('X');
-    }
-    return prev;
-  });
-
-  console.log(turnCounter);
-
-  if (event.target.textContent === 'X' || event.target.textContent === 'O') {
-    return 
-  } else if (winner === true) {
-    return
-  }
-  if (turn === 'X') {
-    console.log(event.target)
-    console.log(turn)
-    event.target.textContent = 'X';
-  }
-  if (turn === 'O') {
-    console.log(turn)
-    event.target.textContent = 'O'
-  }
-  //set the index of board to equal the text content of the div with id
-  const index = Number(event.target.id)
-  console.log(index)
-  function updateBoard(index: any) {
-    const newBoard = board.map((banana, i) => {
-      if (i === index) {
-        return banana = turn
-      } else {
-        return banana
-      }
-    });
-    setBoard(newBoard)
-    console.log(newBoard)
-  }
-  
-  updateBoard(index)
-  console.log(board)
-  // setBoard((prev) => prev.map((item, i) => {
-  //   const index = event.target.id
-  //   console.log(index)
-  //   return i === index ? turn : item
-  // }))
-  // console.log(board)
-
-  // setBoard((prev) => prev.map((item, i) => {
-  //   const index = event.target.id
-  //   return i === index ? turn : item;
-  // }))
-  // console.log(board)
-};
-
 // const handleClick = (event: any): any => {
 //   turnCounter = turnCounter + 1
 //   if (turnCounter % 2 !== 0) {
@@ -241,66 +277,25 @@ const handleClick = (event: any): void => {
 //   }
 // }
 
-useEffect(() => {
-const newUpdatedMessage = () => {
-  if (turnCounter === 1 && messageEl.current) {
-    messageEl.current.textContent = "New Game! Player X's Turn!"
-  } else if (turn === 'X' && turnCounter != 0 && messageEl.current) {
-    messageEl.current.textContent = "Player X's Turn!"
-  } else if (turn === "O" && messageEl.current) {
-    messageEl.current.textContent = "Player O's Turn!"
-  }
-}
+  // setBoard((prev) => prev.map((item, i) => {
+  //   const index = event.target.id
+  //   console.log(index)
+  //   return i === index ? turn : item
+  // }))
+  // console.log(board)
 
-newUpdatedMessage()
+  // setBoard((prev) => prev.map((item, i) => {
+  //   const index = event.target.id
+  //   return i === index ? turn : item;
+  // }))
+  // console.log(board)
 
+  // const placePiece = (index: any, turn: string, ...board: string[]) => {
+//   setBoard(board.map((item, i) => {
+//         return i === index ? turn : item;
+//       }))
+//         console.log(board)
+// }
 
-}, [messageEl, turnCounter, turn])
-
-
-
-
-
-
-
-
-
-/*----------------------------- Event Listeners -----------------------------*/
-
-
-  return (
-    <>
-      <div className='game'>
-        <h1 className='title'>Tic-Tac-Toe</h1>
-        <h2 className='message' ref={messageEl}>Message</h2>
-
-        <section className="board">
-        <div className="sqr" id="0" onClick={() => handleClick(event)}></div>
-        <div className="sqr" id="1" onClick={() => handleClick(event)}></div>
-        <div className="sqr" id="2" onClick={() => handleClick(event)}></div>
-        <div className="sqr" id="3" onClick={() => handleClick(event)}></div>
-        <div className="sqr" id="4" onClick={() => handleClick(event)}></div>
-        <div className="sqr" id="5" onClick={() => handleClick(event)}></div>
-        <div className="sqr" id="6" onClick={() => handleClick(event)}></div>
-        <div className="sqr" id="7" onClick={() => handleClick(event)}></div>
-        <div className="sqr" id="8" onClick={() => handleClick(event)}></div>
-        </section>
-      </div>
-
-    </>
-  )
-}
-
-export default App
-
-
-///ref={squareEls}
-// ref={squareEls}
-// ref={squareEls}
-// ref={squareEls}
-// ref={squareEls}
-// ref={squareEls}
-// ref={squareEls}
-// ref={squareEls}
-// ref={squareEls}
-// 
+// const squareEls = useRef<any>(null) //useRef is used when a you want a component to 'remember some information, but you don't want that information to trigger new renders
+// //squareEls = getElementByClass to access all the square elements
