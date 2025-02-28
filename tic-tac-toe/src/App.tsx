@@ -46,13 +46,16 @@ const [winner, setWinner] = useState<boolean>(false)
 
 const [tie, setTie] = useState<boolean>(false)
 
-const [turnCounter, setTurnCounter] = useState(1)
+const [turnCounter, setTurnCounter] = useState<number>(1)
 
 /*------------------------ Cached Element References ------------------------*/
 
 const messageEl = useRef<HTMLDivElement | null>(null)
+const squareEls = useRef<HTMLDivElement | null>(null)
 
 // /*-------------------------------- Functions --------------------------------*/
+
+// useEffect(() => {
 
 const handleClick = (event: any): void => {
   setTurnCounter((prev) => prev + 1);
@@ -95,12 +98,36 @@ const handleClick = (event: any): void => {
     });
     setBoard(newBoard)
     console.log(newBoard)
+    declareWinner(newBoard)
   }
   
   updateBoard(index)
+  
+  console.log(winner)
   console.log(board)
 
 };
+
+const declareWinner = (newBoard: string[]) => {
+  if (newBoard[0] != '' && newBoard[0] === newBoard[1] && newBoard[0] === newBoard[2]) {
+    setWinner(true)
+    return console.log(winner)
+  } 
+}
+// }, [board, winner, turn, turnCounter])
+
+
+
+// const square: HTMLCollection = document.getElementsByClassName('sqr') //this is an html collection, it is an array
+// const squareArray = Array.from(square)
+
+
+//if id 0 doesnt equal '', and id 0 = id 1, and id 0 = id 2, player wins
+//if getElementById(0).textContent != 0 && getElementById('0') === getElementById('1') && getElementById('0') === getElementById('2') {
+// 'player ${getElementById('0').textContentWins}'}
+// const playerWin = () => {
+//   if ()
+// }
 
 useEffect(() => {
 const newUpdatedMessage = () => {
@@ -110,6 +137,8 @@ const newUpdatedMessage = () => {
     messageEl.current.textContent = "Player X's Turn!"
   } else if (turn === "O" && messageEl.current) {
     messageEl.current.textContent = "Player O's Turn!"
+  } else if (winner === true) {
+    messageEl.current.textContent = `Player ${turn} wins!`
   }
 }
 
@@ -129,15 +158,15 @@ newUpdatedMessage()
         <h2 className='message' ref={messageEl}>Message</h2>
 
         <section className="board">
-        <div className="sqr" id="0" onClick={() => handleClick(event)}></div>
-        <div className="sqr" id="1" onClick={() => handleClick(event)}></div>
-        <div className="sqr" id="2" onClick={() => handleClick(event)}></div>
-        <div className="sqr" id="3" onClick={() => handleClick(event)}></div>
-        <div className="sqr" id="4" onClick={() => handleClick(event)}></div>
-        <div className="sqr" id="5" onClick={() => handleClick(event)}></div>
-        <div className="sqr" id="6" onClick={() => handleClick(event)}></div>
-        <div className="sqr" id="7" onClick={() => handleClick(event)}></div>
-        <div className="sqr" id="8" onClick={() => handleClick(event)}></div>
+        <div className="sqr" id="0" ref={squareEls} onClick={() => handleClick(event)}></div>
+        <div className="sqr" id="1" ref={squareEls} onClick={() => handleClick(event)}></div>
+        <div className="sqr" id="2" ref={squareEls} onClick={() => handleClick(event)}></div>
+        <div className="sqr" id="3" ref={squareEls} onClick={() => handleClick(event)}></div>
+        <div className="sqr" id="4" ref={squareEls} onClick={() => handleClick(event)}></div>
+        <div className="sqr" id="5" ref={squareEls} onClick={() => handleClick(event)}></div>
+        <div className="sqr" id="6" ref={squareEls} onClick={() => handleClick(event)}></div>
+        <div className="sqr" id="7" ref={squareEls} onClick={() => handleClick(event)}></div>
+        <div className="sqr" id="8" ref={squareEls} onClick={() => handleClick(event)}></div>
         </section>
       </div>
 
