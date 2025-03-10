@@ -24,16 +24,7 @@ function App() {
 
 /*-------------------------------- Constants --------------------------------*/
 
-const winningCombos = [
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
-  [0, 4, 8],
-  [2, 4, 6]
-]
+
 
 
 /*---------------------------- Variables (state) ----------------------------*/
@@ -108,12 +99,27 @@ const handleClick = (event: any): void => {
 
 };
 
-const declareWinner = (newBoard: string[]) => {
-  if (newBoard[0] != '' && newBoard[0] === newBoard[1] && newBoard[0] === newBoard[2]) {
-    setWinner(true)
-    return console.log(winner)
-  } 
+const winningCombos = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6]
+]
+//need to relate the array board to the array winning combos
+//each number in winnings combos corresponds to the index of board where a string isn't ''
+function declareWinner (board: string[]) {
+
+  winningCombos.forEach((banana: number[]) => {
+    if (board[banana[0]] != '' && board[banana[1]] === board[banana[0]] && board[banana[2]] ) {
+      setWinner(true)
+    } 
+  })
 }
+console.log(winner)
 // }, [board, winner, turn, turnCounter])
 
 
