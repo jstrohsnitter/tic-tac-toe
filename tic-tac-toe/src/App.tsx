@@ -48,17 +48,43 @@ const squareEls = useRef<HTMLDivElement | null>(null)
 
 // useEffect(() => {
 
-const handleClick = (event: any): void => {
-  setTurnCounter((prev) => prev + 1);
-
-  setTurnCounter((prev) => {
-    if (prev % 2 === 0) {
-      setTurn('O');
-    } else {
-      setTurn('X');
+useEffect(() => {
+  const newUpdatedMessage = () => {
+    if (winner === true && messageEl.current) {
+      messageEl.current.textContent = `Player ${turn} wins!`
     }
-    return prev;
-  });
+    else if (turnCounter === 1 && messageEl.current) {
+      messageEl.current.textContent = "New Game! Player X's Turn!"
+    } else if (turn === 'X' && turnCounter != 0 && messageEl.current) {
+      messageEl.current.textContent = "Player X's Turn!"
+    } else if (turn === "O" && messageEl.current) {
+      messageEl.current.textContent = "Player O's Turn!"
+    } 
+  }
+  
+  newUpdatedMessage()
+  
+  
+  }, [messageEl, turnCounter, turn, winner])
+
+const handleClick = (event: any): void => {
+
+ 
+  // if (!winner) {
+  // setTurnCounter((prev) => prev + 1);
+  // }
+
+  // setTurnCounter((prev) => {
+  //   if (prev % 2 === 0 && !winner) {
+  //     setTurn('O');
+  //   } else {
+  //     setTurn('X');
+  //   }
+  //   return prev;
+  // });
+
+ 
+
 
   console.log(turnCounter);
 
@@ -68,7 +94,7 @@ const handleClick = (event: any): void => {
     return
   }
   if (turn === 'X') {
-    console.log(event.target)
+    // console.log(event.target)
     console.log(turn)
     event.target.textContent = 'X';
   }
@@ -78,7 +104,7 @@ const handleClick = (event: any): void => {
   }
   //set the index of board to equal the text content of the div with id
   const index = Number(event.target.id)
-  console.log(index)
+  // console.log(index)
   function updateBoard(index: number) {
     const newBoard = board.map((banana, i) => {
       if (i === index) {
@@ -88,14 +114,14 @@ const handleClick = (event: any): void => {
       }
     });
     setBoard(newBoard)
-    console.log(newBoard)
+    // console.log(newBoard)
     declareWinner(newBoard)
   }
   
   updateBoard(index)
   
-  console.log(winner)
-  console.log(board)
+  // console.log(winner)
+  // console.log(board)
 
 };
 
@@ -111,47 +137,54 @@ const winningCombos = [
 ]
 //need to relate the array board to the array winning combos
 //each number in winnings combos corresponds to the index of board where a string isn't ''
-function declareWinner (board: string[]) {
+// function declareWinner (newBoard: string[]) {
 
-  winningCombos.forEach((banana: number[]) => {
-    if (board[banana[0]] != '' && board[banana[1]] === board[banana[0]] && board[banana[2]] ) {
-      setWinner(true)
-    } 
-  })
-}
-console.log(winner)
-// }, [board, winner, turn, turnCounter])
+//   winningCombos.forEach((banana: number[]) => {
+//     if (newBoard[banana[0]] != '' && newBoard[banana[1]] === newBoard[banana[0]] && newBoard[banana[2]] === newBoard[banana[0]]) {
+//       setWinner(true)
+//     } 
+//   })
 
-
-
-// const square: HTMLCollection = document.getElementsByClassName('sqr') //this is an html collection, it is an array
-// const squareArray = Array.from(square)
-
-
-//if id 0 doesnt equal '', and id 0 = id 1, and id 0 = id 2, player wins
-//if getElementById(0).textContent != 0 && getElementById('0') === getElementById('1') && getElementById('0') === getElementById('2') {
-// 'player ${getElementById('0').textContentWins}'}
-// const playerWin = () => {
-//   if ()
+//   if (!winner) {
+//     setTurnCounter((prev) => {
+//       const newCounter = prev + 1;
+//       setTurn(newCounter % 2 === 0 ? 'O' : 'X');
+//       return newCounter;
+//     });
+//   }
+  
 // }
+// console.log(winner)
 
-useEffect(() => {
-const newUpdatedMessage = () => {
-  if (turnCounter === 1 && messageEl.current) {
-    messageEl.current.textContent = "New Game! Player X's Turn!"
-  } else if (turn === 'X' && turnCounter != 0 && messageEl.current) {
-    messageEl.current.textContent = "Player X's Turn!"
-  } else if (turn === "O" && messageEl.current) {
-    messageEl.current.textContent = "Player O's Turn!"
-  } else if (winner === true) {
-    messageEl.current.textContent = `Player ${turn} wins!`
+function declareWinner(newBoard: string[]) {
+  let isWinner = false;
+
+  winningCombos.forEach((combo) => {
+    if (
+      newBoard[combo[0]] !== '' &&
+      newBoard[combo[0]] === newBoard[combo[1]] &&
+      newBoard[combo[0]] === newBoard[combo[2]]
+    ) {
+      isWinner = true;
+    }
+  });
+
+  if (isWinner) {
+    setWinner(true);
+    return; // Stop execution to prevent turn updates
   }
+
+  // Only update turnCounter if no winner
+  setTurnCounter((prev) => {
+    const newCounter = prev + 1;
+    setTurn(newCounter % 2 === 0 ? 'O' : 'X');
+    return newCounter;
+  });
 }
 
-newUpdatedMessage()
 
 
-}, [messageEl, turnCounter, turn])
+
 
 
 /*----------------------------- Event Listeners -----------------------------*/
@@ -334,3 +367,18 @@ export default App
 
 // const squareEls = useRef<any>(null) //useRef is used when a you want a component to 'remember some information, but you don't want that information to trigger new renders
 // //squareEls = getElementByClass to access all the square elements
+
+// }, [board, winner, turn, turnCounter])
+
+
+
+// const square: HTMLCollection = document.getElementsByClassName('sqr') //this is an html collection, it is an array
+// const squareArray = Array.from(square)
+
+
+//if id 0 doesnt equal '', and id 0 = id 1, and id 0 = id 2, player wins
+//if getElementById(0).textContent != 0 && getElementById('0') === getElementById('1') && getElementById('0') === getElementById('2') {
+// 'player ${getElementById('0').textContentWins}'}
+// const playerWin = () => {
+//   if ()
+// }
